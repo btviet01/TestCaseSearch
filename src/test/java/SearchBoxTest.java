@@ -25,7 +25,7 @@ public class SearchBoxTest {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         Thread.sleep(2000);
-        driver.get("https://https://dev-admin.kelick.io/");
+        driver.get("https:");
         Thread.sleep(3000);
         WebElement email = driver.findElement(By.name("email"));
         email.sendKeys("admin@gmail.com");
