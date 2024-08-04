@@ -38,7 +38,7 @@ public class Scenario_Search{
         // Perform search
         WebElement searchBox = driver.findElement(By.xpath("//*[@title='Tìm kiếm']"));
         searchBox.click();
-        searchBox.sendKeys("Nguyễn Văn A");
+        searchBox.sendKeys("Ngoc Kien");
         searchBox.sendKeys(Keys.RETURN);
         Thread.sleep(3000); // Wait for search results to load
 
@@ -46,7 +46,7 @@ public class Scenario_Search{
         List<WebElement> results = driver.findElements(By.xpath("//*[@class='result-title']"));
         boolean found = false;
         for (WebElement result : results) {
-            if (result.getText().contains("Nguyễn Văn A")) {
+            if (result.getText().contains("Ngoc Kien")) {
                 found = true;
                 result.click(); // Click on the search result to open chat
                 break;
@@ -56,19 +56,31 @@ public class Scenario_Search{
 
         // Verify chat window is opened
         WebElement chatHeader = driver.findElement(By.xpath("//div[@class='chat-header']"));
-        Assert.assertTrue(chatHeader.getText().contains("Nguyễn Văn A"), "Chat window should open with 'Nguyễn Văn A'");
+        Assert.assertTrue(chatHeader.getText().contains("Ngoc Kien"), "Chat window should open with 'Ngoc Kien'");
 
         // Send a message
         WebElement chatInput = driver.findElement(By.xpath("//input[@class='chat-input']"));
-        chatInput.sendKeys("Hello Nguyễn Văn A");
+        chatInput.sendKeys("Hello ");
         chatInput.sendKeys(Keys.RETURN);
 
         // Verify message is sent
-        WebElement lastMessage = driver.findElement(By.xpath("//div[@class='message' and contains(text(),'Hello Nguyễn Văn A')]"));
+        WebElement lastMessage = driver.findElement(By.xpath("//div[@class='message' and contains(text(),'Hello')]"));
         Assert.assertNotNull(lastMessage, "The sent message should be displayed in the chat window");
 
         // Close chat window
         driver.findElement(By.xpath("//button[@class='close-chat']")).click();
+    }
+    @Test
+    public void testNoResultsFound() throws InterruptedException {
+        WebElement searchBox = driver.findElement(By.xpath("//*[@title='Tìm kiếm']"));
+        searchBox.click();
+        searchBox.sendKeys("abcdef");
+        searchBox.sendKeys(Keys.RETURN);
+        Thread.sleep(3000);
+
+        WebElement noResultsMessage = driver.findElement(By.xpath("//div[@role='alert' and contains(@class, 'alert-info')]"));
+        String alertText = noResultsMessage.getText().replace("×", "").trim();
+        Assert.assertEquals(alertText, "Không có kết quả phù hợp", "Text of the alert should be 'Không có kết quả phù hợp'");
     }
 
     @AfterClass
